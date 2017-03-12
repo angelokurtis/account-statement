@@ -19,7 +19,11 @@ public class NubankAccount {
         final List<NubankTransaction> transactions = events
                 .stream()
                 .filter(event -> event.getCategory().equals("transaction"))
-                .map(NubankTransaction::newInstanceOf)
+                .flatMap(event -> NubankTransaction.instancesOf(event).stream())
+                .sorted((transaction, nextTransaction) -> {
+                    final int comparator = transaction.getDueDate().compareTo(nextTransaction.getDueDate());
+                    return comparator != 0 ? comparator : transaction.getDate().compareTo(nextTransaction.getDate());
+                })
                 .collect(Collectors.toList());
         return new NubankAccount(transactions);
     }

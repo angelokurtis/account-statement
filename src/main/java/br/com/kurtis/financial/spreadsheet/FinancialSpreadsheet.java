@@ -40,7 +40,7 @@ public class FinancialSpreadsheet {
         return new FinancialSpreadsheet(workbook);
     }
 
-    @Builder(builderMethodName = "lineBuilder")
+    @Builder(builderMethodName = "lineBuilder", builderClassName = "LineBuilder")
     public void addLine(LocalDate dueDate, Bank bank, String description, String code, BigDecimal value) {
         int colNum = 0;
         final int rowNum = getNextRow().getRowNum();
