@@ -21,7 +21,7 @@ public class NubankTransaction extends Transaction {
 
     @Builder
     public NubankTransaction(final LocalDate dueDate, final Bank bank, final String description, final BigDecimal value, final String code, final LocalDateTime date) {
-        super(dueDate, bank, description, value, code);
+        super(dueDate, bank, description, code, value);
         this.date = date;
     }
 

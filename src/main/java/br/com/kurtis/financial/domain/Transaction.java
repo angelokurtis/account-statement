@@ -12,6 +12,6 @@ public class Transaction {
     private LocalDate dueDate;
     private Bank bank;
     private String description;
-    private BigDecimal value;
     private String code;
+    private BigDecimal value;
 }

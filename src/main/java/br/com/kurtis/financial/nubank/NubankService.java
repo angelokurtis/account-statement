@@ -1,7 +1,7 @@
 package br.com.kurtis.financial.nubank;
 
+import br.com.kurtis.financial.domain.Transaction;
 import br.com.kurtis.financial.nubank.domain.NubankAccount;
-import br.com.kurtis.financial.nubank.domain.NubankTransaction;
 import br.com.kurtis.financial.nubank.model.Event;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,9 +25,9 @@ public class NubankService {
         this.mapper = mapper;
     }
 
-    public List<NubankTransaction> transactionsFrom(String jsonPath) throws IOException {
+    public List<Transaction> transactionsFrom(String jsonPath) throws IOException {
         final NubankAccount nubankAccount = NubankAccount.newInstanceOf(eventsFrom(jsonPath));
-        return nubankAccount.getTransactions();
+        return (List<Transaction>) (List<?>) nubankAccount.getTransactions();
     }
 
     private List<Event> eventsFrom(String jsonPath) throws IOException {
