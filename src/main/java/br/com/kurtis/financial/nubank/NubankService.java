@@ -5,7 +5,7 @@ import br.com.kurtis.financial.nubank.domain.NubankAccount;
 import br.com.kurtis.financial.nubank.model.Event;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,25 +15,25 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Slf4j
 public class NubankService {
 
     private final ObjectMapper mapper;
 
     @Autowired
-    public NubankService(ObjectMapper mapper) {
+    public NubankService(@NonNull final ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
-    public List<Transaction> transactionsFrom(String jsonPath) throws IOException {
-        final NubankAccount nubankAccount = NubankAccount.newInstanceOf(eventsFrom(jsonPath));
-        return (List<Transaction>) (List<?>) nubankAccount.getTransactions();
-    }
-
-    private List<Event> eventsFrom(String jsonPath) throws IOException {
+    private List<Event> eventsFrom(@NonNull final String jsonPath) throws IOException {
         final File stream = new File(jsonPath);
         final JsonNode jsonEvents = mapper.readTree(stream).get("events");
         final Event[] events = mapper.treeToValue(jsonEvents, Event[].class);
         return Arrays.asList(events);
+    }
+
+    public List<Transaction> transactionsFrom(@NonNull final String jsonPath) throws IOException {
+        final NubankAccount nubankAccount = NubankAccount.newInstanceOf(eventsFrom(jsonPath));
+        final List transactions = nubankAccount.getTransactions();
+        return (List<Transaction>) transactions;
     }
 }

@@ -2,6 +2,7 @@ package br.com.kurtis.financial.infra;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +23,7 @@ public class ConfigProperties {
         }
     }
 
-    public static String getProperty(String propertyKey) {
+    public static String getProperty(@NonNull String propertyKey) {
         return properties.getProperty(propertyKey);
     }
 

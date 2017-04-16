@@ -4,6 +4,7 @@ import br.com.kurtis.financial.domain.Transaction;
 import br.com.kurtis.financial.infra.ContextConfiguration;
 import br.com.kurtis.financial.nubank.NubankService;
 import br.com.kurtis.financial.spreadsheet.SpreadsheetGenerator;
+import lombok.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class AccountStatementApp {
 
-    public static void main(String args[]) throws IOException {
+    public static void main(@NonNull String args[]) throws IOException {
         final ApplicationContext context = new AnnotationConfigApplicationContext(ContextConfiguration.class);
         final NubankService nubankService = context.getBean(NubankService.class);
         final SpreadsheetGenerator spreadsheetGenerator = context.getBean(SpreadsheetGenerator.class);

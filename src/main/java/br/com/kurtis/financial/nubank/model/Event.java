@@ -1,9 +1,15 @@
 package br.com.kurtis.financial.nubank.model;
 
+import br.com.kurtis.financial.infra.ConfigProperties;
 import com.fasterxml.jackson.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -18,6 +24,11 @@ import java.util.Map;
         "href"
 })
 public class Event {
+
+    @JsonIgnore
+    private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    @JsonIgnore
+    private static final DateTimeFormatter DATE_STRING_FORMATTER = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
     @JsonProperty("description")
     private String description;
@@ -38,7 +49,7 @@ public class Event {
     @JsonProperty("href")
     private String href;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("description")
     public String getDescription() {
@@ -140,4 +151,43 @@ public class Event {
         this.additionalProperties.put(name, value);
     }
 
+    @JsonIgnore
+    public LocalDateTime getDateTime() {
+        final String timeZoneId = ConfigProperties.getProperty("app.time_zone");
+        final TimeZone zone = TimeZone.getTimeZone(timeZoneId);
+        final DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern(DATETIME_FORMAT)
+                .withZone(zone.toZoneId());
+
+        return LocalDateTime.parse(getTime(), formatter);
+    }
+
+    @JsonIgnore
+    public LocalDate getDueDate() {
+        final LocalDateTime date = getDateTime();
+        final Integer dueDate = Integer.valueOf(ConfigProperties.getProperty("nubank.due_date"));
+        return date.getDayOfMonth() >= (dueDate - 7) ? date.plusMonths(1).withDayOfMonth(dueDate).toLocalDate() : date.withDayOfMonth(dueDate).toLocalDate();
+    }
+
+    @JsonIgnore
+    public String getFullDescription() {
+        return '[' + getDateTime().format(DATE_STRING_FORMATTER) + "] " + getDescription();
+    }
+
+    @JsonIgnore
+    public int getNumberOfCharges() {
+        return hasCharges() ? getDetails().getCharges().getCount() : 1;
+    }
+
+    @JsonIgnore
+    public BigDecimal getValue() {
+        final String amount = hasCharges() ? getAmount().toString() : getAmount().toString();
+        final String valueString = new StringBuilder(amount).insert(amount.length() - 2, ".").toString();
+        return new BigDecimal(valueString);
+    }
+
+    @JsonIgnore
+    public boolean hasCharges() {
+        return getDetails().getCharges() != null;
+    }
 }
