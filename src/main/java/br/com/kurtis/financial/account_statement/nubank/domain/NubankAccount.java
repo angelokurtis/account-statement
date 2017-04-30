@@ -1,6 +1,6 @@
-package br.com.kurtis.financial.nubank.domain;
+package br.com.kurtis.financial.account_statement.nubank.domain;
 
-import br.com.kurtis.financial.nubank.model.Event;
+import br.com.kurtis.financial.account_statement.nubank.json.Event;
 import lombok.Getter;
 import lombok.NonNull;
 

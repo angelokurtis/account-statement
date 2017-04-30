@@ -1,8 +1,10 @@
-package br.com.kurtis.financial.nubank;
+package br.com.kurtis.financial.account_statement.nubank;
 
-import br.com.kurtis.financial.domain.Transaction;
-import br.com.kurtis.financial.nubank.domain.NubankAccount;
-import br.com.kurtis.financial.nubank.model.Event;
+import br.com.kurtis.financial.account_statement.AccountService;
+import br.com.kurtis.financial.account_statement.Transaction;
+import br.com.kurtis.financial.account_statement.nubank.domain.NubankAccount;
+import br.com.kurtis.financial.account_statement.nubank.domain.NubankTransaction;
+import br.com.kurtis.financial.account_statement.nubank.json.Event;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -15,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class NubankService {
+public class NubankService implements AccountService {
 
     private final ObjectMapper mapper;
 
@@ -31,9 +33,13 @@ public class NubankService {
         return Arrays.asList(events);
     }
 
-    public List<Transaction> transactionsFrom(@NonNull final String jsonPath) throws IOException {
+    private List<NubankTransaction> nubankTransactionsFrom(@NonNull final String jsonPath) throws IOException {
         final NubankAccount nubankAccount = NubankAccount.newInstanceOf(eventsFrom(jsonPath));
-        final List transactions = nubankAccount.getTransactions();
+        return nubankAccount.getTransactions();
+    }
+
+    public List<Transaction> transactionsFrom(@NonNull final String jsonPath) throws IOException {
+        final List transactions = nubankTransactionsFrom(jsonPath);
         return (List<Transaction>) transactions;
     }
 }

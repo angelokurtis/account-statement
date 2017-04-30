@@ -1,6 +1,6 @@
-package br.com.kurtis.financial.spreadsheet;
+package br.com.kurtis.financial.account_statement.spreadsheet;
 
-import br.com.kurtis.financial.domain.Transaction;
+import br.com.kurtis.financial.account_statement.Transaction;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 

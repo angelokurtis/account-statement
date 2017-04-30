@@ -1,4 +1,4 @@
-package br.com.kurtis.financial.nubank.model;
+package br.com.kurtis.financial.account_statement.nubank.json;
 
 import br.com.kurtis.financial.infra.ConfigProperties;
 import com.fasterxml.jackson.annotation.*;
@@ -152,6 +152,11 @@ public class Event {
     }
 
     @JsonIgnore
+    public Integer getChargeValue() {
+        return getDetails().getCharges().getAmount();
+    }
+
+    @JsonIgnore
     public LocalDateTime getDateTime() {
         final String timeZoneId = ConfigProperties.getProperty("app.time_zone");
         final TimeZone zone = TimeZone.getTimeZone(timeZoneId);
@@ -181,9 +186,10 @@ public class Event {
 
     @JsonIgnore
     public BigDecimal getValue() {
-        final String amount = hasCharges() ? getAmount().toString() : getAmount().toString();
+        final String amount = hasCharges() ? getChargeValue().toString() : getAmount().toString();
         final String valueString = new StringBuilder(amount).insert(amount.length() - 2, ".").toString();
-        return new BigDecimal(valueString);
+        System.out.println(getFullDescription() + " " + valueString);
+        return new BigDecimal(valueString).multiply(BigDecimal.ONE.negate());
     }
 
     @JsonIgnore

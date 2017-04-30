@@ -1,8 +1,8 @@
-package br.com.kurtis.financial.nubank.domain;
+package br.com.kurtis.financial.account_statement.nubank.domain;
 
-import br.com.kurtis.financial.domain.Bank;
-import br.com.kurtis.financial.domain.Transaction;
-import br.com.kurtis.financial.nubank.model.Event;
+import br.com.kurtis.financial.account_statement.Bank;
+import br.com.kurtis.financial.account_statement.Transaction;
+import br.com.kurtis.financial.account_statement.nubank.json.Event;
 import com.google.common.collect.Lists;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +26,8 @@ public class NubankTransaction extends Transaction {
     private List<String> tags;
 
     @Builder
-    public NubankTransaction(@NonNull final LocalDate dueDate, @NonNull final Bank bank, @NonNull final String description, @NonNull final BigDecimal value, @NonNull final String code, String category, @NonNull final LocalDateTime date, List<String> tags) {
-        super(dueDate, bank, description, code, value);
+    public NubankTransaction(final Bank bank, final String code, final String description, final LocalDate dueDate, final BigDecimal value, final String category, final LocalDateTime date, final List<String> tags) {
+        super(bank, code, description, dueDate, value);
         this.category = Optional.ofNullable(category);
         this.date = date;
         this.tags = tags != null ? tags : emptyList();

@@ -1,6 +1,6 @@
-package br.com.kurtis.financial.spreadsheet;
+package br.com.kurtis.financial.account_statement.spreadsheet;
 
-import br.com.kurtis.financial.domain.Bank;
+import br.com.kurtis.financial.account_statement.Bank;
 import br.com.kurtis.financial.infra.ConfigProperties;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -81,13 +81,13 @@ public class FinancialSpreadsheet {
     }
 
     @Builder(builderMethodName = "lineBuilder", builderClassName = "LineBuilder")
-    public void addLine(@NonNull final LocalDate dueDate, @NonNull final Bank bank, @NonNull final String description, @NonNull final String code, @NonNull final BigDecimal value, final String category, final List<String> tags) {
+    private void addLine(@NonNull final LocalDate dueDate, @NonNull final Bank bank, @NonNull final String description, final String code, @NonNull final BigDecimal value, final String category, final List<String> tags) {
         int colNum = 0;
         final int rowNum = getNextRow().getRowNum();
         addCell(dueDate, rowNum, colNum++);
         addCell(bank, rowNum, colNum++);
         addCell(description, rowNum, colNum++);
-        addCell(code, rowNum, colNum++);
+        addCell(code != null ? code : "XXXX", rowNum, colNum++);
         addCell(value, rowNum, colNum++);
         if (category != null) addCell(category, rowNum, colNum++);
         if (tags != null) addCell(tags, rowNum, colNum);

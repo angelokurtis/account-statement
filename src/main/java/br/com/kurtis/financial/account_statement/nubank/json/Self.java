@@ -1,4 +1,4 @@
-package br.com.kurtis.financial.nubank.model;
+package br.com.kurtis.financial.account_statement.nubank.json;
 
 import com.fasterxml.jackson.annotation.*;
 
