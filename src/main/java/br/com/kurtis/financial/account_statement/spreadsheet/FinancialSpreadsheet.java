@@ -89,7 +89,8 @@ public class FinancialSpreadsheet {
         addCell(description, rowNum, colNum++);
         addCell(code != null ? code : "XXXX", rowNum, colNum++);
         addCell(value, rowNum, colNum++);
-        if (category != null) addCell(category, rowNum, colNum++);
+        colNum++;
+        if (category != null) addCell(category, rowNum, colNum);
         if (tags != null) addCell(tags, rowNum, colNum);
     }
 
